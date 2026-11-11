@@ -1,0 +1,1536 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCity EcoSystem</title>
+
+    <style>
+        :root {
+            --green: #16865b;
+            --green-light: #e8f5ee;
+            --blue: #3275b9;
+            --background: #f5f7f6;
+            --white: #ffffff;
+            --text: #24332c;
+            --muted: #7c8982;
+            --border: #e7ece9;
+            --red: #dc6262;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        button, input, select {
+            font: inherit;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 235px;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            padding: 27px 17px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding-left: 8px;
+        }
+
+        .brand-icon {
+            width: 39px;
+            height: 39px;
+            background: var(--green-light);
+            color: var(--green);
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 22px;
+        }
+
+        .brand h2 {
+            font-size: 17px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        .nav-title {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 20px 10px 10px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #68766f;
+            padding: 12px;
+            margin: 3px 0;
+            border-radius: 9px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--green-light);
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .sidebar-info {
+            margin-top: 45px;
+            padding: 13px;
+            background: #f0f7f3;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #527360;
+            line-height: 1.6;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 12px;
+        }
+
+        .topbar h1 {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .local-status {
+            background: #e9f6ef;
+            color: var(--green);
+            padding: 9px 13px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .section-heading {
+            margin: 25px 0 15px;
+            font-size: 16px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 19px;
+        }
+
+        .card-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .card-value {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 15px 0 7px;
+        }
+
+        .card-note {
+            font-size: 11px;
+            color: var(--green);
+        }
+
+        .card-icon {
+            font-size: 21px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 21px;
+            margin-bottom: 17px;
+        }
+
+        .panel h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .panel-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* PROGRESS */
+
+        .progress-row {
+            margin: 19px 0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 9px;
+        }
+
+        .progress-bar {
+            background: #edf1ee;
+            height: 9px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 20px;
+            transition: width .3s;
+        }
+
+        /* FORMS */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #ffffff;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--green);
+        }
+
+        .btn {
+            background: var(--green);
+            color: white;
+            padding: 11px 17px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #116b47;
+        }
+
+        .btn-secondary {
+            background: #edf5f0;
+            color: var(--green);
+        }
+
+        .btn-danger {
+            background: #fff0f0;
+            color: var(--red);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 10px;
+        }
+
+        /* TABLE */
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 540px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 13px 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: bold;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 25px;
+            font-size: 12px;
+        }
+
+        .notice {
+            background: #f0f7f3;
+            border-left: 3px solid var(--green);
+            border-radius: 6px;
+            padding: 13px;
+            font-size: 12px;
+            color: #526b5c;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .result {
+            background: var(--green-light);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+
+        .result strong {
+            font-size: 24px;
+            color: var(--green);
+        }
+
+        .result p {
+            font-size: 12px;
+            color: #527360;
+            margin-top: 5px;
+        }
+
+        .footer {
+            color: var(--muted);
+            font-size: 10px;
+            text-align: center;
+            padding: 25px 0 10px;
+        }
+
+        @media(max-width: 950px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 650px) {
+            .app {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .nav-title, .sidebar-info {
+                display: none;
+            }
+
+            .nav-btn {
+                width: auto;
+                display: inline-block;
+                padding: 10px;
+            }
+
+            .main {
+                padding: 20px 15px;
+            }
+
+            .content-grid, .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- MENU LATERAL -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🌱</div>
+            <div>
+                <h2>SmartCity</h2>
+                <small>ECOSYSTEM</small>
+            </div>
+        </div>
+
+        <p class="nav-title">GENERAL</p>
+
+        <button class="nav-btn active" data-page="dashboard">
+            ◫ Dashboard
+        </button>
+
+        <p class="nav-title">MONITOREO</p>
+
+        <button class="nav-btn" data-page="energia">
+            ⚡ Energía
+        </button>
+
+        <button class="nav-btn" data-page="movilidad">
+            🚗 Movilidad
+        </button>
+
+        <button class="nav-btn" data-page="residuos">
+            ♻ Residuos
+        </button>
+
+        <p class="nav-title">GESTIÓN</p>
+
+        <button class="nav-btn" data-page="sostenibilidad">
+            🌿 Sostenibilidad
+        </button>
+
+        <button class="nav-btn" data-page="registros">
+            ▤ Registros
+        </button>
+
+        <div class="sidebar-info">
+            <strong>Ciudad inteligente</strong>
+            <br>
+            Tecnología al servicio del medio ambiente.
+            <br><br>
+            Sistema de demostración local.
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1 id="page-title">Dashboard</h1>
+                <p>Panel de control de ciudad inteligente y sostenible.</p>
+            </div>
+
+            <div class="local-status">
+                ● SISTEMA LOCAL
+            </div>
+        </header>
+
+
+        <!-- DASHBOARD -->
+
+        <section class="page active" id="dashboard">
+
+            <div class="notice">
+                Bienvenido a SmartCity EcoSystem. Desde este panel
+                puedes registrar y analizar información de energía,
+                movilidad y residuos de la ciudad.
+            </div>
+
+            <div class="cards">
+
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-label">Ahorro energético</div>
+                    <div class="card-value" id="dash-saving">0 kWh</div>
+                    <div class="card-note">Energía optimizada</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌎</div>
+                    <div class="card-label">CO₂ evitado estimado</div>
+                    <div class="card-value" id="dash-carbon">0 kg</div>
+                    <div class="card-note">Impacto ambiental</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🚗</div>
+                    <div class="card-label">Vehículos registrados</div>
+                    <div class="card-value" id="dash-vehicles">0</div>
+                    <div class="card-note">Datos de movilidad</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">♻</div>
+                    <div class="card-label">Contenedores</div>
+                    <div class="card-value" id="dash-waste">0</div>
+                    <div class="card-note">Registros de residuos</div>
+                </div>
+
+            </div>
+
+            <h2 class="section-heading">Resumen de la ciudad</h2>
+
+            <div class="content-grid">
+
+                <div class="panel">
+                    <h3>Indicadores de sostenibilidad</h3>
+                    <p class="panel-description">
+                        Estado de los principales indicadores registrados.
+                    </p>
+
+                    <div class="progress-row">
+                        <div class="progress-info">
+                            <span>Ahorro energético</span>
+                            <strong id="dash-percent">0%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="dash-progress"
+                                 style="width:0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-row">
+                        <div class="progress-info">
+                            <span>Registros de movilidad</span>
+                            <strong id="dash-mobility-count">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="progress-row">
+                        <div class="progress-info">
+                            <span>Registros ambientales</span>
+                            <strong id="dash-record-count">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Actividad reciente</h3>
+                    <p class="panel-description">
+                        Últimos registros de la plataforma.
+                    </p>
+
+                    <div id="recent-records" class="empty">
+                        No hay registros todavía.
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ENERGÍA -->
+
+        <section class="page" id="energia">
+
+            <div class="panel">
+                <h3>⚡ Gestión energética</h3>
+                <p class="panel-description">
+                    Compara el consumo energético y calcula el ahorro
+                    obtenido mediante estrategias de optimización.
+                </p>
+
+                <div class="notice">
+                    Ingresa valores de consumo en kilovatios hora (kWh).
+                    Puedes utilizar los datos de ejemplo del taller.
+                </div>
+
+                <form id="energy-form">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>Consumo inicial (kWh)</label>
+                            <input type="number" id="initial-energy"
+                                   min="0.01" step="any" value="1000" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Consumo optimizado (kWh)</label>
+                            <input type="number" id="optimized-energy"
+                                   min="0" step="any" value="700" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Factor de emisiones (kg CO₂e/kWh)</label>
+                            <input type="number" id="carbon-factor"
+                                   min="0" step="any" value="0.15" required>
+                        </div>
+
+                    </div>
+
+                    <button class="btn" type="submit">
+                        Calcular ahorro energético
+                    </button>
+
+                </form>
+
+                <div class="result" id="energy-result">
+                    <p>Porcentaje de ahorro energético</p>
+                    <strong id="energy-percent">30%</strong>
+                    <p id="energy-detail">
+                        Ahorro estimado: 300 kWh · CO₂e evitado: 45 kg
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <h3>Registrar medición energética</h3>
+                <p class="panel-description">
+                    Simula la información obtenida por un sensor IoT.
+                </p>
+
+                <form id="energy-record-form">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>Ubicación del sensor</label>
+                            <input id="energy-location" type="text"
+                                   placeholder="Ej. Alumbrado zona norte" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Consumo medido (kWh)</label>
+                            <input id="energy-reading" type="number"
+                                   min="0" step="any" placeholder="Ej. 250" required>
+                        </div>
+
+                    </div>
+
+                    <button class="btn" type="submit">
+                        + Registrar medición
+                    </button>
+
+                </form>
+            </div>
+
+        </section>
+
+
+        <!-- MOVILIDAD -->
+
+        <section class="page" id="movilidad">
+
+            <div class="panel">
+                <h3>🚗 Gestión de movilidad</h3>
+                <p class="panel-description">
+                    Registra información del tránsito para analizar
+                    la movilidad de la ciudad.
+                </p>
+
+                <div class="notice">
+                    En una implementación real, los datos serían capturados
+                    automáticamente mediante sensores de tráfico y cámaras.
+                </div>
+
+                <form id="mobility-form">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>Ubicación</label>
+                            <input id="mobility-location" type="text"
+                                   placeholder="Ej. Avenida principal" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Cantidad de vehículos</label>
+                            <input id="mobility-vehicles" type="number"
+                                   min="0" step="1" placeholder="Ej. 120" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Distancia recorrida (km)</label>
+                            <input id="mobility-distance" type="number"
+                                   min="0" step="any" placeholder="Ej. 15" required>
+                        </div>
+
+                    </div>
+
+                    <button class="btn" type="submit">
+                        + Registrar movilidad
+                    </button>
+
+                </form>
+            </div>
+
+            <div class="panel">
+                <h3>Información registrada</h3>
+                <div id="mobility-summary" class="empty">
+                    Todavía no existen datos de movilidad.
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- RESIDUOS -->
+
+        <section class="page" id="residuos">
+
+            <div class="panel">
+                <h3>♻ Gestión de residuos</h3>
+                <p class="panel-description">
+                    Monitorea el nivel de llenado de los contenedores
+                    de residuos de la ciudad.
+                </p>
+
+                <div class="notice">
+                    Los porcentajes representan mediciones simuladas
+                    de sensores inteligentes instalados en los contenedores.
+                </div>
+
+                <form id="waste-form">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label>Identificación del contenedor</label>
+                            <input id="waste-location" type="text"
+                                   placeholder="Ej. Contenedor 001" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Nivel de llenado (%)</label>
+                            <input id="waste-level" type="number"
+                                   min="0" max="100" step="1"
+                                   placeholder="Ej. 85" required>
+                        </div>
+
+                    </div>
+
+                    <button class="btn" type="submit">
+                        + Registrar contenedor
+                    </button>
+
+                </form>
+            </div>
+
+            <div class="panel">
+                <h3>Estado de contenedores</h3>
+                <div id="waste-summary" class="empty">
+                    Todavía no existen contenedores registrados.
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SOSTENIBILIDAD -->
+
+        <section class="page" id="sostenibilidad">
+
+            <div class="panel">
+                <h3>🌿 Estrategias de sostenibilidad</h3>
+                <p class="panel-description">
+                    Principios aplicados en SmartCity EcoSystem.
+                </p>
+
+                <div class="progress-row">
+                    <strong>1. Optimización energética</strong>
+                    <p class="panel-description">
+                        Reducir el consumo de alumbrado mediante sensores
+                        inteligentes y control automático.
+                    </p>
+                </div>
+
+                <div class="progress-row">
+                    <strong>2. Edge Computing</strong>
+                    <p class="panel-description">
+                        Procesar los datos cerca de los dispositivos
+                        para reducir transmisiones innecesarias.
+                    </p>
+                </div>
+
+                <div class="progress-row">
+                    <strong>3. Virtualización</strong>
+                    <p class="panel-description">
+                        Compartir recursos computacionales y evitar
+                        infraestructura física innecesaria.
+                    </p>
+                </div>
+
+                <div class="progress-row">
+                    <strong>4. Optimización de rutas</strong>
+                    <p class="panel-description">
+                        Mejorar los recorridos de recolección para
+                        disminuir distancias y combustible.
+                    </p>
+                </div>
+
+                <div class="progress-row">
+                    <strong>5. Uso eficiente de la nube</strong>
+                    <p class="panel-description">
+                        Utilizar infraestructura eficiente y priorizar
+                        energías renovables.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Resultados ambientales calculados</h3>
+
+                <div class="cards">
+                    <div>
+                        <div class="card-label">Ahorro energético</div>
+                        <div class="card-value" id="sustain-energy">0 kWh</div>
+                    </div>
+
+                    <div>
+                        <div class="card-label">CO₂e evitado</div>
+                        <div class="card-value" id="sustain-carbon">0 kg</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- REGISTROS -->
+
+        <section class="page" id="registros">
+
+            <div class="panel">
+                <h3>▤ Historial de registros</h3>
+                <p class="panel-description">
+                    Consulta la información registrada en los módulos.
+                </p>
+
+                <div class="actions">
+                    <button class="btn" onclick="exportCSV()">
+                        Exportar CSV
+                    </button>
+
+                    <button class="btn btn-secondary"
+                            onclick="loadExamples()">
+                        Cargar datos de ejemplo
+                    </button>
+
+                    <button class="btn btn-danger"
+                            onclick="clearRecords()">
+                        Borrar registros
+                    </button>
+                </div>
+
+                <div class="table-wrap" style="margin-top:20px">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Ubicación</th>
+                                <th>Valor</th>
+                                <th>Detalle</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="records-table">
+                            <tr>
+                                <td colspan="5" class="empty">
+                                    No hay registros.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="notice">
+                La información se almacena en el almacenamiento local
+                del navegador (LocalStorage). No se envía a servidores externos.
+            </div>
+
+        </section>
+
+
+        <footer class="footer">
+            SmartCity EcoSystem · Prototipo académico de sostenibilidad
+            tecnológica · 2026
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // 1. ALMACENAMIENTO LOCAL
+    // ==========================================
+
+    const STORAGE_KEY = "smartcity_ecosystem_data";
+
+    function loadData() {
+
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+
+            return saved ? JSON.parse(saved) : {
+                records: [],
+                energy: {
+                    initial: 1000,
+                    optimized: 700,
+                    factor: 0.15
+                }
+            };
+
+        } catch (error) {
+            console.error("Error leyendo los datos:", error);
+
+            return {
+                records: [],
+                energy: {
+                    initial: 1000,
+                    optimized: 700,
+                    factor: 0.15
+                }
+            };
+        }
+    }
+
+    let data = loadData();
+
+    function saveData() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (error) {
+            alert("No fue posible guardar los datos en el navegador.");
+        }
+    }
+
+
+    // ==========================================
+    // 2. NAVEGACIÓN
+    // ==========================================
+
+    const titles = {
+        dashboard: "Dashboard",
+        energia: "Gestión energética",
+        movilidad: "Gestión de movilidad",
+        residuos: "Gestión de residuos",
+        sostenibilidad: "Sostenibilidad tecnológica",
+        registros: "Historial de registros"
+    };
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const page = button.dataset.page;
+
+            document.querySelectorAll(".nav-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            document.querySelectorAll(".page").forEach(section => {
+                section.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            document.getElementById(page).classList.add("active");
+
+            document.getElementById("page-title").textContent =
+                titles[page];
+        });
+    });
+
+
+    // ==========================================
+    // 3. CÁLCULO ENERGÉTICO
+    // ==========================================
+
+    function calculateEnergy() {
+
+        const initial = Number(data.energy.initial);
+        const optimized = Number(data.energy.optimized);
+        const factor = Number(data.energy.factor);
+
+        const saving = initial - optimized;
+        const percentage = initial > 0
+            ? (saving / initial) * 100
+            : 0;
+
+        const carbon = saving * factor;
+
+        return {
+            saving,
+            percentage,
+            carbon
+        };
+    }
+
+    document.getElementById("energy-form")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const initial = Number(
+                document.getElementById("initial-energy").value
+            );
+
+            const optimized = Number(
+                document.getElementById("optimized-energy").value
+            );
+
+            const factor = Number(
+                document.getElementById("carbon-factor").value
+            );
+
+            if (
+                !Number.isFinite(initial) ||
+                !Number.isFinite(optimized) ||
+                !Number.isFinite(factor) ||
+                initial <= 0 ||
+                optimized < 0 ||
+                optimized > initial ||
+                factor < 0
+            ) {
+                alert("Verifica los valores ingresados.");
+                return;
+            }
+
+            data.energy = {
+                initial,
+                optimized,
+                factor
+            };
+
+            saveData();
+            render();
+
+            alert("Cálculo energético actualizado correctamente.");
+        });
+
+
+    // ==========================================
+    // 4. REGISTRO DE INFORMACIÓN
+    // ==========================================
+
+    function addRecord(type, location, value, unit, detail) {
+
+        const record = {
+            id: Date.now() + Math.random(),
+            type,
+            location,
+            value,
+            unit,
+            detail,
+            date: new Date().toLocaleString("es-CO")
+        };
+
+        data.records.unshift(record);
+
+        saveData();
+        render();
+    }
+
+
+    // ENERGÍA
+
+    document.getElementById("energy-record-form")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const location =
+                document.getElementById("energy-location").value.trim();
+
+            const value =
+                Number(document.getElementById("energy-reading").value);
+
+            if (!location || !Number.isFinite(value) || value < 0) {
+                alert("Ingresa una ubicación y un consumo válido.");
+                return;
+            }
+
+            addRecord(
+                "Energía",
+                location,
+                value,
+                "kWh",
+                "Medición de consumo energético"
+            );
+
+            event.target.reset();
+
+            alert("Medición energética registrada.");
+        });
+
+
+    // MOVILIDAD
+
+    document.getElementById("mobility-form")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const location =
+                document.getElementById("mobility-location").value.trim();
+
+            const vehicles =
+                Number(document.getElementById("mobility-vehicles").value);
+
+            const distance =
+                Number(document.getElementById("mobility-distance").value);
+
+            if (
+                !location ||
+                !Number.isInteger(vehicles) ||
+                vehicles < 0 ||
+                !Number.isFinite(distance) ||
+                distance < 0
+            ) {
+                alert("Verifica los datos de movilidad.");
+                return;
+            }
+
+            addRecord(
+                "Movilidad",
+                location,
+                vehicles,
+                "vehículos",
+                distance + " km recorridos"
+            );
+
+            event.target.reset();
+
+            alert("Registro de movilidad guardado.");
+        });
+
+
+    // RESIDUOS
+
+    document.getElementById("waste-form")
+        .addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const location =
+                document.getElementById("waste-location").value.trim();
+
+            const level =
+                Number(document.getElementById("waste-level").value);
+
+            if (
+                !location ||
+                !Number.isInteger(level) ||
+                level < 0 ||
+                level > 100
+            ) {
+                alert("El nivel de llenado debe estar entre 0 y 100.");
+                return;
+            }
+
+            addRecord(
+                "Residuos",
+                location,
+                level,
+                "%",
+                level >= 80
+                    ? "Requiere recolección prioritaria"
+                    : "Nivel de llenado registrado"
+            );
+
+            event.target.reset();
+
+            alert("Contenedor registrado correctamente.");
+        });
+
+
+    // ==========================================
+    // 5. ACTUALIZACIÓN DEL DASHBOARD
+    // ==========================================
+
+    function render() {
+
+        const energy = calculateEnergy();
+
+        const records = data.records;
+
+        const mobility = records.filter(r => r.type === "Movilidad");
+
+        const waste = records.filter(r => r.type === "Residuos");
+
+        const totalVehicles = mobility.reduce(
+            (total, record) => total + Number(record.value), 0
+        );
+
+        // Indicadores
+
+        document.getElementById("dash-saving").textContent =
+            energy.saving.toFixed(2) + " kWh";
+
+        document.getElementById("dash-carbon").textContent =
+            energy.carbon.toFixed(2) + " kg";
+
+        document.getElementById("dash-vehicles").textContent =
+            totalVehicles;
+
+        document.getElementById("dash-waste").textContent =
+            waste.length;
+
+        document.getElementById("dash-percent").textContent =
+            energy.percentage.toFixed(1) + "%";
+
+        document.getElementById("dash-progress").style.width =
+            Math.min(100, Math.max(0, energy.percentage)) + "%";
+
+        document.getElementById("dash-mobility-count").textContent =
+            mobility.length;
+
+        document.getElementById("dash-record-count").textContent =
+            records.length;
+
+        document.getElementById("sustain-energy").textContent =
+            energy.saving.toFixed(2) + " kWh";
+
+        document.getElementById("sustain-carbon").textContent =
+            energy.carbon.toFixed(2) + " kg";
+
+        // Resultado energético
+
+        document.getElementById("energy-percent").textContent =
+            energy.percentage.toFixed(2) + "%";
+
+        document.getElementById("energy-detail").textContent =
+            "Ahorro: " + energy.saving.toFixed(2) +
+            " kWh · CO₂e evitado: " +
+            energy.carbon.toFixed(2) + " kg";
+
+        // Registros recientes
+
+        const recent = document.getElementById("recent-records");
+
+        if (records.length === 0) {
+
+            recent.innerHTML = "No hay registros todavía.";
+
+        } else {
+
+            recent.innerHTML = records.slice(0, 4).map(record => `
+                <div class="progress-row">
+                    <div class="progress-info">
+                        <span>${escapeHTML(record.location)}</span>
+                        <strong>${escapeHTML(record.type)}</strong>
+                    </div>
+                    <small>${escapeHTML(record.value)} ${escapeHTML(record.unit)}</small>
+                </div>
+            `).join("");
+        }
+
+        // Tabla de registros
+
+        const table = document.getElementById("records-table");
+
+        if (records.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        No hay registros disponibles.
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            table.innerHTML = records.map(record => `
+                <tr>
+                    <td><span class="tag">${escapeHTML(record.type)}</span></td>
+                    <td>${escapeHTML(record.location)}</td>
+                    <td>${escapeHTML(record.value)} ${escapeHTML(record.unit)}</td>
+                    <td>${escapeHTML(record.detail)}</td>
+                    <td>${escapeHTML(record.date)}</td>
+                </tr>
+            `).join("");
+        }
+
+        // Resumen de movilidad
+
+        document.getElementById("mobility-summary").innerHTML =
+            mobility.length
+                ? `<strong>${totalVehicles} vehículos</strong>
+                   registrados en ${mobility.length} mediciones.`
+                : "Todavía no existen datos de movilidad.";
+
+        // Resumen de residuos
+
+        document.getElementById("waste-summary").innerHTML =
+            waste.length
+                ? waste.map(record => `
+                    <div class="progress-row">
+                        <div class="progress-info">
+                            <span>${escapeHTML(record.location)}</span>
+                            <strong>${record.value}%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"
+                                 style="width:${record.value}%"></div>
+                        </div>
+                        <small>
+                            ${record.value >= 80
+                                ? "⚠ Requiere recolección prioritaria"
+                                : "Nivel de llenado normal"}
+                        </small>
+                    </div>
+                `).join("")
+                : "Todavía no existen contenedores registrados.";
+
+        // Sincronizar formulario energético
+
+        document.getElementById("initial-energy").value =
+            data.energy.initial;
+
+        document.getElementById("optimized-energy").value =
+            data.energy.optimized;
+
+        document.getElementById("carbon-factor").value =
+            data.energy.factor;
+    }
+
+
+    // ==========================================
+    // 6. SEGURIDAD AL MOSTRAR TEXTO
+    // ==========================================
+
+    function escapeHTML(value) {
+
+        return String(value).replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[character]);
+    }
+
+
+    // ==========================================
+    // 7. DATOS DE EJEMPLO
+    // ==========================================
+
+    function loadExamples() {
+
+        if (data.records.length > 0) {
+            if (!confirm("Se agregarán datos de ejemplo a los registros actuales. ¿Continuar?")) {
+                return;
+            }
+        }
+
+        const examples = [
+            {
+                type: "Energía",
+                location: "Alumbrado zona norte",
+                value: 250,
+                unit: "kWh",
+                detail: "Medición de consumo energético"
+            },
+            {
+                type: "Movilidad",
+                location: "Avenida principal",
+                value: 120,
+                unit: "vehículos",
+                detail: "15 km recorridos"
+            },
+            {
+                type: "Residuos",
+                location: "Contenedor 001",
+                value: 85,
+                unit: "%",
+                detail: "Requiere recolección prioritaria"
+            },
+            {
+                type: "Residuos",
+                location: "Contenedor 002",
+                value: 40,
+                unit: "%",
+                detail: "Nivel de llenado registrado"
+            }
+        ];
+
+        examples.forEach(example => {
+            data.records.unshift({
+                ...example,
+                id: Date.now() + Math.random(),
+                date: new Date().toLocaleString("es-CO")
+            });
+        });
+
+        saveData();
+        render();
+
+        alert("Datos de ejemplo agregados correctamente.");
+    }
+
+
+    // ==========================================
+    // 8. EXPORTAR INFORMACIÓN
+    // ==========================================
+
+    function exportCSV() {
+
+        if (data.records.length === 0) {
+            alert("No hay registros para exportar.");
+            return;
+        }
+
+        const rows = [
+            ["Tipo", "Ubicacion", "Valor", "Unidad", "Detalle", "Fecha"],
+            ...data.records.map(record => [
+                record.type,
+                record.location,
+                record.value,
+                record.unit,
+                record.detail,
+                record.date
+            ])
+        ];
+
+        const csv = "\uFEFF" + rows.map(row =>
+            row.map(value =>
+                '"' + String(value).replace(/"/g, '""') + '"'
+            ).join(";")
+        ).join("\n");
+
+        const blob = new Blob([csv], {
+            type: "text/csv;charset=utf-8;"
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "smartcity_registros.csv";
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+
+    // ==========================================
+    // 9. ELIMINAR REGISTROS
+    // ==========================================
+
+    function clearRecords() {
+
+        if (confirm("¿Seguro que deseas borrar todos los registros?")) {
+
+            data.records = [];
+
+            saveData();
+            render();
+
+            alert("Los registros fueron eliminados.");
+        }
+    }
+
+
+    // ==========================================
+    // 10. INICIAR APLICACIÓN
+    // ==========================================
+
+    render();
+
+</script>
+
+</body>
+</html>
